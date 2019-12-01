@@ -6,6 +6,7 @@ public class Piece
 {
 	public	String PiecePosition;
 	public	boolean isBlack;
+	public boolean hasMoved;
 	public	int type;
 	public Hashtable<Character, Hashtable<Character, Piece>> Pieceboard; 
 	public Hashtable<String, Pawn> pawns;

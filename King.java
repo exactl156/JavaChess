@@ -8,6 +8,7 @@ public class King extends Piece
 	{
 		super(position, side,board);
 		type=4;
+		hasMoved=false;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -15,6 +16,7 @@ public class King extends Piece
 	{
 		super(col, row, side,board);
 		type=4;
+		hasMoved=false;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -26,7 +28,7 @@ public class King extends Piece
 		char chCol=positio.charAt(0);
 		int row = (int)chRow;
 		int col = (int)chCol;
-		System.out.println("ror"+row);
+		//System.out.println("ror"+row);
 
 
 		char chProw= PiecePosition.charAt(1);
@@ -48,6 +50,35 @@ public class King extends Piece
 		}
 		
 		
+		return true;
+	}
+	public boolean validateCastle(String positio) 
+	{
+		char chRow=positio.charAt(1);
+		char chCol=positio.charAt(0);
+		int row = (int)chRow;
+		int col = (int)chCol;
+		//System.out.println("ror"+row);
+
+
+		char chProw= PiecePosition.charAt(1);
+		char chPcol= PiecePosition.charAt(0);
+		int Prow= (int)chProw;
+		int Pcol= (int)chPcol;
+		int diffC=(col-Pcol)/Math.abs(col-Pcol);
+		
+		if (getPiece(positio).hasMoved||hasMoved) 
+		{
+			return false;
+		}
+		
+		for(char i=(char) (chPcol+diffC);i!=chCol;i+=diffC) 
+		{
+			if(getPiece(chProw,i).type!=0) 
+			{
+				return false;
+			}
+		}
 		return true;
 	}
 

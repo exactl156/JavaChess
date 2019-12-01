@@ -3,7 +3,8 @@ package chess5;
 import java.util.Hashtable;
 
 public class Pawn extends Piece {
-public boolean hasMoved;
+
+	public boolean moved2;
 	public Pawn(String position, boolean side, Hashtable<Character, Hashtable<Character, Piece>> board) {
 		super(position, side, board);
 		type=1;
@@ -29,13 +30,22 @@ public boolean hasMoved;
 		int Pcol= (int)PiecePosition.charAt(0);
 		if(!hasMoved) 
 		{
-			if(col==Pcol&&Math.abs(Prow-row)==2) 
+			if(col==Pcol&&(Prow-row)==2&&isBlack) 
 			{
 				hasMoved=false;
+				moved2=true;
+				return true;
+			}
+			if(col==Pcol&&(row-Prow)==2&&!isBlack) 
+			{
+				hasMoved=false;
+				moved2=true;
 				return true;
 			}
 		}
-		if(Math.abs(Prow-row)==1&&col==Pcol) 
+		
+		
+		if((Prow-row)==1&&col==Pcol&&isBlack) 
 		{
 			if(getPiece(positio).type==0) 
 			{
@@ -46,7 +56,32 @@ public boolean hasMoved;
 				return false;
 			}
 		}
-		if(Math.abs(Prow-row)==1&&(Math.abs(col-Pcol))==1) 
+		if((row-Prow)==1&&col==Pcol&&!isBlack) 
+		{
+			if(getPiece(positio).type==0) 
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		}
+		
+		
+		
+		if((Prow-row)==1&&(Math.abs(col-Pcol))==1&&isBlack) 
+		{
+			if( getPiece(positio).type!=0&& ( !(getPiece(positio).isBlack&&isBlack) ) ) 
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		}
+		if((row-Prow)==1&&(Math.abs(col-Pcol))==1&&!isBlack) 
 		{
 			if( getPiece(positio).type!=0&& ( !(getPiece(positio).isBlack&&isBlack) ) ) 
 			{

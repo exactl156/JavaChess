@@ -24,7 +24,11 @@ public class board {
 	public String previosPosition;
 	public King KingInCheck;
 	public Piece intialize;
-	public int turn;
+	public double turn;
+	public boolean Whiteside;
+	public boolean enPassantPossible;
+	public String enPassantSquare;
+	public Piece enPassantPawnLoc;
 	public board() throws IOException 
 	{
 		System.out.println("in board");
@@ -34,18 +38,21 @@ public class board {
 		//printBoard();
 		generateTables();
 		turn = 1;
-
+		Whiteside=true;
 		//testMoves();
 		//ValidatetestMoves();
 		//printBoard();
 		/*System.out.println("knig"+knights.toString());
 		System.out.println("paw"+pawns.toString());
-		System.out.println("Que"+queens.toString());*/
-		System.out.println("bi "+bishops.toString());
+		System.out.println("Que"+queens.toString());
+		System.out.println("bi "+bishops.toString());*/
 		printBoard();
+		
 		resetMoves();
-		testCheckMoves();
-		System.out.println("bi "+bishops.toString());
+		testEnpassant();
+		//testCastleMoves();
+		//testCheckMoves2();
+		//System.out.println("bi "+bishops.toString());
 		//testInputMoves();
 		//		System.out.println(knights.toString());
 		//		System.out.println(""+getPiece('1', 'a').type+getPiece('1', 'a').PiecePosition);
@@ -79,7 +86,19 @@ public class board {
 		move(getPiece("c1"), "a3");
 		move(getPiece("c8"), "a6");
 	}
-
+	/*
+	 * */
+public void testEnpassant() 
+{
+	ValidateMove(getPiece("e2"), "e4");
+	printBoard();
+	ValidateMove(getPiece("e4"), "e5");
+	printBoard();
+	ValidateMove(getPiece("d7"), "d5");
+	printBoard();
+	ValidateMove(getPiece("e5"), "d6");
+	printBoard();
+}
 
 	/*
 	 * 1. this method is devoted to testing validate moves
@@ -135,26 +154,32 @@ public class board {
 		//ValidateMove(getPiece("c1"), "b2");
 	}
 
+	
+	/*
+	 * 1. This method is devoted to testing the board for checks
+	 * 2. it does so by checking various checks positions to see how it reacts.
+	 * 3. This method returns nothing but updates the board
+	 * */
 	public void testCheckMoves() 
 	{
-		ValidateMove(getPiece("e2"), "e4");
+		ValidateMove(getPiece("e2"), "e4");//white pawn e2 to e4
 		printBoard();
-		ValidateMove(getPiece("d7"), "d5");
-		printBoard();
-
-		ValidateMove(getPiece("f1"), "b5");
-		printBoard();
-		ValidateMove(getPiece("c7"), "c6");
+		ValidateMove(getPiece("d7"), "d5");//black pawn d7 fo d5
 		printBoard();
 
-		ValidateMove(getPiece("b5"), "a6");
+		ValidateMove(getPiece("f1"), "b5");//white bishop f1 to b5 checking
 		printBoard();
-		ValidateMove(getPiece("f8"), "b4");
+		ValidateMove(getPiece("c7"), "c6");//black pawn c7 to c6
 		printBoard();
+//turn 3 printed
+		ValidateMove(getPiece("b5"), "a6");//white bishop b5 to a6 
+		printBoard();//turn 3.5
+		ValidateMove(getPiece("f8"), "b4");//black bishop f8 to b4 checking but fails b/c pawn
+		printBoard();//turn 3.5
 
-		ValidateMove(getPiece("b5"), "a6");
+		ValidateMove(getPiece("b5"), "a6");//white bishop b5 to a6 causes turn to switch
 		printBoard();
-		ValidateMove(getPiece("e7"), "e6");
+		ValidateMove(getPiece("e7"), "e6");//black pawn e7 moves to e6
 		printBoard();
 
 		ValidateMove(getPiece("d2"), "d3");
@@ -168,10 +193,91 @@ public class board {
 		printBoard();
 		
 		ValidateMove(getPiece("c3"), "b4");
+		ValidateMove(getPiece("b4"), "b6");
 		printBoard();
 		//ValidateMove(getPiece("b4"), "e1");
 		//printBoard();
 	}
+	
+	
+	/*
+	 * 1. this method is devoted to testing castling
+	 * 2. it does so by recreating various castling situations
+	 * 3. it returns nothing but updates board
+	 * */
+	public void testCastleMoves() 
+	{
+		ValidateMove(getPiece("g1"), "f3");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("g2"), "g3");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("f1"), "g2");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("e1"), "h1");//white pawn e2 to e4
+		printBoard();
+		
+		resetMoves();
+		printBoard();
+		ValidateMove(getPiece("b1"), "c3");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("b2"), "b3");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("e2"), "e3");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("c1"), "b2");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("d1"), "e2");
+		printBoard();
+		ValidateMove(getPiece("e1"), "a1");
+		printBoard();
+	}
+	
+	
+	/*
+	 * 1. This method is devoted to testing the board for checks
+	 * 2. it does so by checking various checks positions to see how it reacts.
+	 * 3. This method returns nothing but updates the board
+	 * */
+	public void testCheckMoves2() 
+	{
+		ValidateMove(getPiece("e2"), "e4");//white pawn e2 to e4
+		printBoard();
+		ValidateMove(getPiece("d7"), "d5");//black pawn d7 fo d5
+		printBoard();
+
+		ValidateMove(getPiece("f1"), "b5");//white bishop f1 to b5 checking
+		printBoard();
+		ValidateMove(getPiece("c7"), "c6");//black pawn c7 to c6
+		printBoard();
+//turn 3 printed
+		ValidateMove(getPiece("b5"), "a6");//white bishop b5 to a6 
+		printBoard();//turn 3.5
+		ValidateMove(getPiece("f8"), "b4");//black bishop f8 to b4 checking but fails b/c pawn
+		printBoard();//turn 3.5
+
+		ValidateMove(getPiece("b5"), "a6");//white bishop b5 to a6 causes turn to switch
+		printBoard();
+		ValidateMove(getPiece("e7"), "e6");//black pawn e7 moves to e6
+		printBoard();
+
+		ValidateMove(getPiece("d2"), "d3");//white pawn d2 to d3
+		printBoard();
+		ValidateMove(getPiece("f8"), "b4");//black bishop f8 to b4 causes check on white
+		printBoard();
+		
+		ValidateMove(getPiece("a2"), "a3");//white pawn a2 to a3 failing move as it is in check
+		printBoard();
+		ValidateMove(getPiece("c2"), "c3");//white pawn c2 to c3  working move as it blocks check
+		printBoard();
+		
+		ValidateMove(getPiece("c3"), "b4");//white pawn c3 to b4 captures bishop
+		ValidateMove(getPiece("b4"), "b6");//white pawn b4 to b6 fails as it is two spaces ahead
+		printBoard();
+		//ValidateMove(getPiece("b4"), "e1");
+		//printBoard();
+	}
+	
+	
 	/*
 	 * 1. This method is devoted to testing human entered input
 	 * 2. it does so by calling the input method.
@@ -322,7 +428,7 @@ public class board {
 	 * */
 	public void printBoard() 
 	{
-		System.out.println("The turn is "+turn);
+		System.out.println("The turn is "+turn+(Whiteside?"white":"black"));
 		for(char row='8';row>='1';row--) {
 			for(char col='a';col<='h';col++) 
 			{
@@ -353,6 +459,7 @@ public class board {
 		setPiecePosition(previousPosition, p);
 		p.PiecePosition=previousPosition;
 		turn--;
+		Whiteside=!Whiteside;
 	}
 
 
@@ -363,7 +470,7 @@ public class board {
 	 * It then creates an empty square to be place into the old swuare before moving its piece in the new square
 	 * 3. this method returns nothing but updates the board and recordings.
 	 * */
-	public void move(Piece p,String position)
+	public boolean move(Piece p,String position)
 	{
 		//System.out.println("knighs"+knights.toString());
 		previousPiece=p;
@@ -376,18 +483,22 @@ public class board {
 
 		setPiecePosition(position, p);
 		p.PiecePosition=position;
+		
+		
 		boolean temp = KingInCheck();
-		System.out.println("king check stat "+temp+" previous pos "+previosPosition);
-		turn=1+turn;
+		//System.out.println("king check stat "+temp+" previous pos "+previosPosition);
+		turn=0.5+turn;
+		Whiteside=!Whiteside;
 		if (temp) 
 		{
 			if(KingInCheck.isBlack==p.isBlack) 
 			{
 				undoMove(p, previosPosition);
+				return false;
 			}
 			else 
 			{
-				
+				return true;
 			}
 			/*if(KingInCheck.isBlack) 
 			{
@@ -398,7 +509,32 @@ public class board {
 				System.out.println("the white king is in check");
 			}*/
 		}
-
+		if(Math.abs(p.type)==1) 
+		{
+			if(((Pawn)p).moved2) 
+			{
+				enPassantPossible=true;
+				enPassantPawnLoc=p;
+				if(p.isBlack) 
+				{
+					enPassantSquare=""+enPassantPawnLoc.PiecePosition.charAt(0)+(char)(enPassantPawnLoc.PiecePosition.charAt(1)+1);
+				}
+				else 
+				{
+					enPassantSquare=""+enPassantPawnLoc.PiecePosition.charAt(0)+(char)(enPassantPawnLoc.PiecePosition.charAt(1)-1);
+				}
+				((Pawn)p).moved2=false;
+			}
+			else 
+			{
+				enPassantPossible=false;
+			}
+		}
+		else
+		{
+			enPassantPossible=false;
+		}
+		return true;
 	}
 
 
@@ -507,51 +643,104 @@ public class board {
 	 * */
 	public void ValidateMove(Piece p, String position) 
 	{
-
+		if(!enpassantPass(p, position)) 
+		{
 		switch (Math.abs(p.type)) 
 		{
 		case 1:
 			if(((Pawn)p).validateMove(position)) 
 			{
-				move(p, position);
+				
+				boolean r=move(p, position);
+				if(r)p.hasMoved=true;
 				if(position.charAt(1)=='8') 
 				{
 					PromotePawn(p);
 				}
+				
+				System.out.println(enPassantPossible+" "+enPassantSquare+" "+enPassantPawnLoc.isBlack);
 			}
 			break;
 		case 2:
 			if(((Knight)p).validateMove(position)) 
 			{
-				move(p, position);
+				boolean r=move(p, position);
+				if(r)p.hasMoved=true;
 			}
 			break;
 		case 3:
 			if(((Bishop)p).validateMove(position)) 
 			{
-				move(p, position);
+				boolean r=move(p, position);
+				if(r)p.hasMoved=true;
 			}
 			break;
 		case 4:
-			if(((King)p).validateMove(position)) 
+			if((position.charAt(0)=='a'||position.charAt(0)=='h')&&(position.charAt(1)=='1'||position.charAt(1)=='8') )
 			{
-				move(p, position);
+				if(((King)p).validateCastle(position)) 
+				{
+					CastleMove(p, position);
+				}
+			}
+			else 
+			{
+				if(((King)p).validateMove(position)) 
+				{
+					boolean r=move(p, position);
+					if(r)p.hasMoved=true;
+				}
 			}
 			break;
 		case 5:
 			if(((Rook)p).validateMove(position)) 
 			{
-				move(p, position);
+				boolean r=move(p, position);
+				if(r)p.hasMoved=true;
 			}
 			break;
 		case 10:
 			if(((Queen)p).validateMove(position)) 
 			{
-				move(p, position);
+				boolean r=move(p, position);
+				if(r)p.hasMoved=true;
 			}
 			break;
 		default:
 			break;
+		}
+		}
+	}
+	
+	
+	public void CastleMove(Piece p,String position) 
+	{
+		char t = position.charAt(0);
+		if(t=='a') 
+		{
+			if(p.isBlack) 
+			{
+				move(p,"c8" );
+				move(getPiece(position),"d8");
+			}
+			else 
+			{
+				move(p,"c1" );
+				move(getPiece(position),"d1");
+			}
+		}
+		else 
+		{
+			if(p.isBlack) 
+			{
+				move(p,"g8" );
+				move(getPiece(position),"f8");
+			}
+			else 
+			{
+				move(p,"g1" );
+				move(getPiece(position),"f1");
+			}
 		}
 	}
 
@@ -572,6 +761,32 @@ public class board {
 		//	System.out.println(queens);
 		board.get(p.PiecePosition.charAt(1)).put(p.PiecePosition.charAt(0), q);
 		//	System.out.println(getPiece("g8").type);
+	}
+	
+	public boolean enpassantPass(Piece p, String position) 
+	{
+		
+		if(enPassantPossible) 
+		{
+			char PasRow=position.charAt(1);
+			char PasCol=position.charAt(0);
+			int iPasRow=(int)PasRow;
+			int iPasCol=(int)PasCol;
+			
+			char Row=p.PiecePosition.charAt(1);
+			char Col=p.PiecePosition.charAt(0);
+			int iRow=(int)Row;
+			int iCol=(int)Col;
+			
+			if(Math.abs(iRow-iPasRow)==1&&Math.abs(iPasCol-iCol)==1&&(enPassantPawnLoc.type==(-p.type))) 
+			{
+				move(p, enPassantSquare);
+				removePiecePosition((enPassantPawnLoc.PiecePosition), (enPassantPawnLoc));
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/*
@@ -609,7 +824,9 @@ public class board {
 		{
 			String key = Kingkeys.nextElement();
 			King Kin=kings.get(key);
-			if(bishopCheck(Kin))
+			String key2 = Kingkeys.nextElement();
+			King Kin2=kings.get(key2);
+			if(bishopCheck(Kin) || rookCheck(Kin)||queenCheck(Kin)||pawnCheck(Kin)||knightCheck(Kin))
 			{
 				KingInCheck=Kin;
 				return true;
@@ -659,11 +876,74 @@ public class board {
 			{
 				return true;
 			}
-
 		}
 		return false;
 	}
 	
 	
+	/*
+	 * 1.This method is devoted to seeing if the Queen can check the king
+	 * 2. it does so by seeing if the Queen can take the king position which is stored
+	 * 3. It returns true or false whether Queens can take the king
+	 * */
+	public boolean queenCheck(Piece king) 
+	{
+		//printBoard();
+		Enumeration<String> queeKeys = queens.keys();
+		while(queeKeys.hasMoreElements())
+		{
+			String key = queeKeys.nextElement();
+			Queen qu=queens.get(key);
+			if(qu.validateMove(king.PiecePosition)) 
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/*
+	 * 1.This method is devoted to seeing if the Knight can check the king
+	 * 2. it does so by seeing if the Knight can take the king position which is stored
+	 * 3. It returns true or false whether Knights can take the king
+	 * */
+	public boolean knightCheck(Piece king) 
+	{
+		//printBoard();
+		Enumeration<String> kniKeys = knights.keys();
+		while(kniKeys.hasMoreElements())
+		{
+			String key = kniKeys.nextElement();
+			Knight kn=knights.get(key);
+			if(kn.validateMove(king.PiecePosition)) 
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/*
+	 * 1.This method is devoted to seeing if the Pawn can check the king
+	 * 2. it does so by seeing if the Pawn can take the king position which is stored
+	 * 3. It returns true or false whether Pawns can take the king
+	 * */
+	public boolean pawnCheck(Piece king) 
+	{
+		//printBoard();
+		Enumeration<String> pawKeys = pawns.keys();
+		while(pawKeys.hasMoreElements())
+		{
+			String key = pawKeys.nextElement();
+			Pawn paws=pawns.get(key);
+			if(paws.validateMove(king.PiecePosition)) 
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

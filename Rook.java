@@ -4,16 +4,18 @@ import java.util.Hashtable;
 
 public class Rook extends Piece 
 {
-
+	public boolean hasMoved;
 	public Rook(String position, boolean side,Hashtable<Character, Hashtable<Character, Piece>> board) {
 		super(position, side,board);
 		type=5;
+		hasMoved=false;
 		// TODO Auto-generated constructor stub
 	}
 
 	public Rook(char col, char row, boolean side,Hashtable<Character, Hashtable<Character, Piece>> board) {
 		super(col, row, side,board);
 		type=5;
+		hasMoved=false;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -26,7 +28,7 @@ public class Rook extends Piece
 		char chCol=positio.charAt(0);
 		int row = (int)chRow;
 		int col = (int)chCol;
-		System.out.println("ror"+row);
+		//System.out.println("ror"+row);
 
 
 		char chProw= PiecePosition.charAt(1);

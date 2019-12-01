@@ -25,7 +25,7 @@ public class Knight extends Piece
 		char chCol=positio.charAt(0);
 		int row = (int)chRow;
 		int col = (int)chCol;
-		System.out.println("ror"+row);
+		//System.out.println("ror"+row);
 
 
 		char chProw= PiecePosition.charAt(1);
